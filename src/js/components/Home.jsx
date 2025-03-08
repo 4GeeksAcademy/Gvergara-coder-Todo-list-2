@@ -1,26 +1,47 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, {useState} from "react";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+	const [tasks, setTasks] = useState(["Make the bed", "Whas my hands", "Eat", "Walk the dog"]);
+	/*const [newTask, setNewTask] = useState ("");*/
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+	function handleKeyPress(event){
+		
+		if (event.key == "Enter" && event.target.value != ""){
+			setTasks([...tasks, event.target.value])
+		} 
+	}
+	function deleteTask(index){
+		const updateTasks = tasks.filter((_, i) => i !== index);
+		setTasks(updateTasks);
+	}
+
+	return (
+		<div className="to-do-list">
+			<h1>To-Do-List</h1>
+
+			<div>
+				<input type="text" 
+				placeholder="Enter a task..."
+				onKeyDown={handleKeyPress}
+				/>
+			</div>
+
+			<ol>
+				{tasks.map((task, index) =>
+					<li key={index}>
+						<span className="text">{task}</span>
+						<button
+							className="delete-button"
+							onClick={() => deleteTask(index)}
+						>X</button>
+
+
+					</li>
+
+				)}
+			</ol>
+
 		</div>
 	);
 };
