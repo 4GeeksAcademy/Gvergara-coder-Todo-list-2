@@ -48,3 +48,11 @@ li{
 .text{
     flex: 10;
 }
+.tasks-p{
+    font-size: 10px;
+    border-radius: 5px;
+    width: 100%;
+    padding: 15px;
+    background-color: aliceblue;
+    text-align: end;
+}

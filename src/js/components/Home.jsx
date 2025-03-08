@@ -35,12 +35,14 @@ const Home = () => {
 							className="delete-button"
 							onClick={() => deleteTask(index)}
 						>X</button>
-
-
 					</li>
 
 				)}
 			</ol>
+			<div className="tasks-p">
+				{tasks.length}
+				<p>Pending Tasks</p>
+			</div>
 
 		</div>
 	);
