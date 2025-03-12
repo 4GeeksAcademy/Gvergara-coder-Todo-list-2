@@ -56,3 +56,10 @@ li{
     background-color: aliceblue;
     text-align: end;
 }
+
+.task-hidden > button{
+    opacity: 0;
+}
+.task-hidden:hover > button{
+    opacity: 1;
+}
