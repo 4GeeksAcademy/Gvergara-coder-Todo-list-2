@@ -1,9 +1,44 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 //create your first component
 const Home = () => {
-	const [tasks, setTasks] = useState(["Make the bed", "Whas my hands", "Eat", "Walk the dog"]);
+	const apiUrl = "https://playground.4geeks.com/todo"
+	const userName = "Gvergara"
+	const [tasks, setTasks] = useState([]);
 	const [newTask, setNewTask] = useState ("");
+
+	function createUser(){
+		fetch(`${apiUrl}/users/${userName}`, {method: "POST"})
+		.then(response => {
+			if(!response.ok){
+				throw new Error("error creando el usuario");
+			}
+			return response.json()
+		})
+		.then(data => console.log(data))
+		.catch(error => console.error(error))
+	}
+
+	function getTodos(){
+		fetch(`${apiUrl}/users/${userName}`)
+		.then(response => {
+			if(!response.ok){
+				if(response.status == 404){
+					createUser()
+				}
+				throw new Error("no se pudo obtener la lista de tareas");
+			}
+			return response.json()
+		})
+		.then(data => {
+			if(data){
+				console.log(data)
+				
+				setTasks(data.todos)
+			}
+		})
+		.catch(error => console.error(error))
+	}
 
 	function handleKeyPress(event){
 		
@@ -16,6 +51,9 @@ const Home = () => {
 		setTasks(updateTasks);
 	}
 
+	useEffect(()=>{
+		getTodos()
+	},[])
 	return (
 		<div className="to-do-list">
 			<h1>To-Do-List</h1>
@@ -33,7 +71,7 @@ const Home = () => {
 			<ol>
 				{tasks.map((task, index) =>
 					<li key={index} className="task-hidden">
-						<span className="text">{task}</span>
+						<span className="text">{task.label}</span>
 						<button
 							className="delete-button"
 							onClick={() => deleteTask(index)}
