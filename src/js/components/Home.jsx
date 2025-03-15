@@ -19,6 +19,7 @@ const Home = () => {
 		.catch(error => console.error(error))
 	}
 
+
 	function getTodos(){
 		fetch(`${apiUrl}/users/${userName}`)
 		.then(response => {
@@ -38,17 +39,31 @@ const Home = () => {
 			}
 		})
 		.catch(error => console.error(error))
+
+	}
+	function addTodo(task){
+		fetch(`${apiUrl}/todos/${userName}`, {method: "POST", headers: {"Content-type": "application/json" },
+			body: JSON.stringify({label: task, done: false})
+		})
+		.then(() => getTodos())
+		.catch((error) => console.error(error));
 	}
 
+	function deleteTodo(index){
+		fetch(`${apiUrl}/todos/${index}`, {method: "DELETE", })
+		.then(() => getTodos())
+		.catch((error) => console.error(error))
+	}
+	
 	function handleKeyPress(event){
 		
-		if (event.key == "Enter" && newTask != ""){
-			setTasks([...tasks, newTask])
+		if (event.key == "Enter" && newTask !== ""){
+			addTodo(newTask)
+			setTasks([])
 		} 
 	}
 	function deleteTask(index){
-		const updateTasks = tasks.filter((_, i) => i !== index);
-		setTasks(updateTasks);
+		deleteTodo(index);
 	}
 
 	useEffect(()=>{
@@ -74,15 +89,14 @@ const Home = () => {
 						<span className="text">{task.label}</span>
 						<button
 							className="delete-button"
-							onClick={() => deleteTask(index)}
+							onClick={() => deleteTask(task.id)}
 						>X</button>
 					</li>
 
 				)}
 			</ol>
 			<div className="tasks-p">
-				{tasks.length}
-				<p>Pending Tasks</p>
+			<p>{tasks.length} Pending Tasks</p>
 			</div>
 
 		</div>
